@@ -1,0 +1,23 @@
+---
+
+go_arch_map:
+  i386: '386'
+  x86_64: 'amd64'
+  aarch64: 'arm64'
+  armv7l: 'arm'
+  armv6l: 'arm'
+
+go_arch: "{{ go_arch_map[ansible_architecture] | default(ansible_architecture) }}"
+
+coredns_config_dir: /etc/coredns
+coredns_zone_config_dir: "{{ coredns_config_dir }}/zones" 
+coredns_bin_install_dir: /usr/local/bin
+
+coredns_system_group: coredns
+coredns_system_user: coredns
+
+coredns_service_name: coredns
+
+coredns_archive_name: "coredns_{{ coredns_version }}_linux_{{ go_arch }}.tgz"
+coredns_archive_url: "https://github.com/coredns/coredns/releases/download/v{{ coredns_version }}/{{ coredns_archive_name }}"
+coredns_checksum_url: "{{ coredns_archive_url }}.sha256"

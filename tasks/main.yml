@@ -1,0 +1,10 @@
+---
+
+- name: "main | Install coredns"
+  import_tasks: install.yml
+
+- name: "main | Configure coredns"
+  import_tasks: configure.yml
+
+- name: "main | Configure service"
+  import_tasks: service.yml

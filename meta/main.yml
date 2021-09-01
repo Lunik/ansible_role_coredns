@@ -1,0 +1,35 @@
+galaxy_info:
+  role_name: coredns
+  author: Lunik
+  description: Install and configure CoreDNS service
+
+  # If the issue tracker for your role is not on github, uncomment the
+  # next line and provide a value
+  # issue_tracker_url: http://example.com/issue/tracker
+
+  license: MIT
+
+  min_ansible_version: 2.7
+
+  #
+  # platforms is a list of platforms, and each platform has a name and a list of versions.
+  #
+  # platforms:
+  # - name: Fedora
+  #   versions:
+  #   - all
+  #   - 25
+  # - name: SomePlatform
+  #   versions:
+  #   - all
+  #   - 1.0
+  #   - 7
+  #   - 99.99
+
+  galaxy_tags:
+    - coredns
+    - dns
+    - kubernetes
+    - system
+
+dependencies: []

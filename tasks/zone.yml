@@ -1,0 +1,14 @@
+---
+
+- name: "zone | {{ zone.name }} | Copy db"
+  become: yes
+  template:
+    src: "{{ zone.template }}"
+    dest: "{{ coredns_zone_config_dir }}/{{ zone.file }}"
+    owner: root
+    group: "{{ coredns_system_group }}"
+    mode: 0444
+  notify:
+    - "handler | Reload coredns"
+  vars:
+    zone_format: coredns

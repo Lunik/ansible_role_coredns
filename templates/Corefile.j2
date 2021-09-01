@@ -1,0 +1,78 @@
+(default) {
+
+  # log enables query logging to standard output.
+  # https://coredns.io/plugins/log/
+  log
+
+  # errors enables error logging.
+  # https://coredns.io/plugins/errors/
+  errors
+
+  # loadbalance randomizes the order of A, AAAA and MX records.
+  # https://coredns.io/plugins/loadbalance/
+  loadbalance round_robin
+
+  # cache enables a frontend cache.
+  # https://coredns.io/plugins/cache/
+  cache {
+
+    success {{ coredns_ttl.success.capacity }} {{ coredns_ttl.success.max }} {{ coredns_ttl.success.min }}
+    denial {{ coredns_ttl.denial.capacity }} {{ coredns_ttl.denial.max }} {{ coredns_ttl.denial.min }}
+
+    # If {{ coredns_cache_prefetch.amount }} request (or more) in less than {{ coredns_cache_prefetch.duration }},
+    # prefetch when TTL is bellow {{ coredns_cache_prefetch.percentage }}
+    prefetch {{ coredns_cache_prefetch.amount }} {{ coredns_cache_prefetch.duration }} {{ coredns_cache_prefetch.percentage }}
+
+    serve_stale {{ coredns_cache_serve_stale.duration }}
+  }
+
+  # acl enforces access control policies on source ip and prevents unauthorized access to DNS servers.
+  # https://coredns.io/plugins/acl/
+  acl {
+    allow net 127.0.0.1
+{% for acl in coredns_acls %}
+    {{ acl.action }} net {{ acl.cidr }}
+{% endfor %}
+    block
+  }
+
+  # nsid adds an identifier of this server to each reply.
+  # https://coredns.io/plugins/nsid/
+  nsid Wabbit Network
+
+  # prometheus enables Prometheus metrics.
+  # https://coredns.io/plugins/metrics/
+  prometheus 0.0.0.0:9253
+
+  # reload allows automatic reload of a changed Corefile.
+  # https://coredns.io/plugins/reload/
+  reload 5m
+}
+
+.:{{ coredns_dns_port }} {
+  import default
+
+  # loop detects simple forwarding loops and halts the server.
+  # https://coredns.io/plugins/loop/
+  loop
+
+  # forward facilitates proxying DNS messages to upstream resolvers.
+  # https://coredns.io/plugins/forward/
+  forward . {{ coredns_forwarders | join(' ') }} {
+    prefer_udp
+    policy sequential
+    health_check 0.5s
+  }
+}
+
+{% for zone in coredns_zones %}
+{{ zone.zone }}:{{ coredns_dns_port }} {
+  # loadbalance randomizes the order of A, AAAA and MX records.
+  # https://coredns.io/plugins/loadbalance/
+  loadbalance round_robin
+
+  # file enables serving zone data from an RFC 1035-style master file.
+  # https://coredns.io/plugins/file/
+  file {{ coredns_zone_config_dir }}/{{ zone.file }} 
+}
+{% endfor %}

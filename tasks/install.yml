@@ -1,0 +1,81 @@
+---
+
+- name: "install | Create the coredns group"
+  become: yes
+  group:
+    name: "{{ coredns_system_group }}"
+    state: present
+    system: true
+
+- name: "install | Create the coredns user"
+  become: yes
+  user:
+    name: "{{ coredns_system_user }}"
+    groups: "{{ coredns_system_group }}"
+    shell: /bin/false
+    system: true
+    createhome: false
+    home: "{{ coredns_config_dir }}"
+
+- name: "install | create coredns configuration directories"
+  become: yes
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: "{{ coredns_system_group }}"
+    mode: 0555
+  loop:
+    - "{{ coredns_config_dir }}"
+    - "{{ coredns_zone_config_dir }}"
+
+- name: "install | Check binary install"
+  stat:
+    path: "{{ coredns_bin_install_dir }}/coredns_{{ coredns_version }}"
+  register: _binary_install_stat
+
+- block:
+  - name: "install | Create temp directory"
+    tempfile:
+      state: directory
+    register: coredns_temp_dir
+    notify:
+      - "handler | Delete temp directory"
+
+  - name: "install | Download coredns binary to local folder"
+    get_url:
+      url: "{{ coredns_archive_url }}"
+      dest: "{{ coredns_temp_dir.path }}/{{ coredns_archive_name }}"
+
+  - name: "install | Unpack coredns binary"
+    unarchive:
+      src: "{{ coredns_temp_dir.path }}/{{ coredns_archive_name }}"
+      dest: "{{ coredns_temp_dir.path }}"
+      remote_src: yes
+
+  - name: "install | Install coredns binaries"
+    become: yes
+    copy:
+      src: "{{ coredns_temp_dir.path }}/coredns"
+      dest: "{{ coredns_bin_install_dir }}/coredns_{{ coredns_version }}"
+      remote_src: yes
+    notify: "handler | Restart coredns"
+  when: not _binary_install_stat.stat.exists
+
+- name: "install | Set binary permissions"
+  become: yes
+  file:
+    path: "{{ coredns_bin_install_dir }}/coredns_{{ coredns_version }}"
+    mode: 0550
+    owner: root
+    group: "{{ coredns_system_group }}"
+
+- name: "install | Link binary"
+  become: yes
+  file:
+    src: "{{ coredns_bin_install_dir }}/coredns_{{ coredns_version }}"
+    dest: "{{ coredns_bin_install_dir }}/coredns"
+    mode: 0550
+    owner: root
+    group: "{{ coredns_system_group }}"
+    state: link

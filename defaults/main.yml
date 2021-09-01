@@ -1,0 +1,41 @@
+---
+
+coredns_version: 1.8.4
+
+coredns_dns_port: 53
+
+coredns_forwarders:
+  - 1.1.1.1
+  - 8.8.8.8
+  - 1.0.0.1
+  - 8.8.4.4
+
+# Plugin documentation
+# https://coredns.io/plugins/acl/
+coredns_acls: []
+#  - cidr: 192.168.0.0/24
+#    action: allow
+
+# Plugin documentation
+# https://coredns.io/plugins/file/
+coredns_zones: []
+#  - name: my-zone
+#    zone: my-zone.fr
+#    file: db.my-zone.fr
+#    template: templates/dbs/my-zone.fr
+
+coredns_cache_prefetch:
+  amount: 10
+  duration: 1m
+  percentage: 90%
+
+coredns_cache_serve_stale:
+  duration: 1h
+
+coredns_ttl:
+  success:
+    min: 60
+    max: 3600
+  denial:
+    min: 60
+    max: 3600

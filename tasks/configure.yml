@@ -1,0 +1,17 @@
+---
+
+- name: "configure | Template main configuration file"
+  become: yes
+  template:
+    src: templates/Corefile.j2
+    dest: "{{ coredns_config_dir }}/Corefile"
+    owner: root
+    group: "{{ coredns_system_group }}"
+    mode: 0444
+  notify: "handler | Reload coredns"
+
+- name: "configure | Template zones"
+  include_tasks: zone.yml
+  loop: "{{ coredns_zones }}"
+  loop_control:
+    loop_var: zone
