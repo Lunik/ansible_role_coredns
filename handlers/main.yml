@@ -1,20 +1,20 @@
 ---
 
 - name: "handler | Delete temp directory"
-  file:
+  ansible.builtin.file:
     path: "{{ coredns_temp_dir.path }}"
     state: absent
 
 - name: "handler | Restart coredns"
   become: true
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: true
     name: "{{ coredns_service_name }}"
     state: restarted
 
 - name: "handler | Reload coredns"
   become: true
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: true
     name: "{{ coredns_service_name }}"
     state: reloaded

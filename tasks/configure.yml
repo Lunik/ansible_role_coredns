@@ -2,7 +2,7 @@
 
 - name: "configure | Template main configuration file"
   become: yes
-  template:
+  ansible.builtin.template:
     src: templates/Corefile.j2
     dest: "{{ coredns_config_dir }}/Corefile"
     owner: root
@@ -11,7 +11,7 @@
   notify: "handler | Reload coredns"
 
 - name: "configure | Template zones"
-  include_tasks: zone.yml
+  ansible.builtin.include_tasks: zone.yml
   loop: "{{ coredns_zones }}"
   loop_control:
     loop_var: zone
