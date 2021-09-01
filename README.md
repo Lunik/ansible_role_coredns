@@ -81,9 +81,9 @@ This role was created in 2019 by [Lunik (Guillaume MARTINEZ)][author-website].
 - [Lunik (Guillaume MARTINEZ)](https://github.com/Lunik)
 
 [author-website]: https://lunik.tiwabbit.fr/
-[badge-downloads]: https://img.shields.io/ansible/role/d/XXXX.svg
+[badge-downloads]: https://img.shields.io/ansible/role/d/56142.svg
 [badge-license]: https://img.shields.io/github/license/Lunik/ansible_role_coredns.svg
-[badge-role]: https://img.shields.io/ansible/role/XXXX.svg
+[badge-role]: https://img.shields.io/ansible/role/56142.svg
 [link-galaxy]: https://galaxy.ansible.com/geerlingguy/homebrew/
 [link-license]: https://raw.githubusercontent.com/Lunik/ansible_role_coredns/master/LICENSE
 [coredns]: https://coredns.io
