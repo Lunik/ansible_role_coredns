@@ -2,14 +2,14 @@
 
 - name: "install | Create the coredns group"
   become: yes
-  group:
+  ansible.builtin.group:
     name: "{{ coredns_system_group }}"
     state: present
     system: true
 
 - name: "install | Create the coredns user"
   become: yes
-  user:
+  ansible.builtin.user:
     name: "{{ coredns_system_user }}"
     groups: "{{ coredns_system_group }}"
     shell: /bin/false
@@ -19,7 +19,7 @@
 
 - name: "install | create coredns configuration directories"
   become: yes
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     owner: root
@@ -30,32 +30,32 @@
     - "{{ coredns_zone_config_dir }}"
 
 - name: "install | Check binary install"
-  stat:
+  ansible.builtin.stat:
     path: "{{ coredns_bin_install_dir }}/coredns_{{ coredns_version }}"
   register: _binary_install_stat
 
 - block:
   - name: "install | Create temp directory"
-    tempfile:
+    ansible.builtin.tempfile:
       state: directory
     register: coredns_temp_dir
     notify:
       - "handler | Delete temp directory"
 
   - name: "install | Download coredns binary to local folder"
-    get_url:
+    ansible.builtin.get_url:
       url: "{{ coredns_archive_url }}"
       dest: "{{ coredns_temp_dir.path }}/{{ coredns_archive_name }}"
 
   - name: "install | Unpack coredns binary"
-    unarchive:
+    ansible.builtin.unarchive:
       src: "{{ coredns_temp_dir.path }}/{{ coredns_archive_name }}"
       dest: "{{ coredns_temp_dir.path }}"
       remote_src: yes
 
   - name: "install | Install coredns binaries"
     become: yes
-    copy:
+    ansible.builtin.copy:
       src: "{{ coredns_temp_dir.path }}/coredns"
       dest: "{{ coredns_bin_install_dir }}/coredns_{{ coredns_version }}"
       remote_src: yes
@@ -64,7 +64,7 @@
 
 - name: "install | Set binary permissions"
   become: yes
-  file:
+  ansible.builtin.file:
     path: "{{ coredns_bin_install_dir }}/coredns_{{ coredns_version }}"
     mode: 0550
     owner: root
@@ -72,7 +72,7 @@
 
 - name: "install | Link binary"
   become: yes
-  file:
+  ansible.builtin.file:
     src: "{{ coredns_bin_install_dir }}/coredns_{{ coredns_version }}"
     dest: "{{ coredns_bin_install_dir }}/coredns"
     mode: 0550

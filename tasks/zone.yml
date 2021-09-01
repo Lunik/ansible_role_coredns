@@ -2,7 +2,7 @@
 
 - name: "zone | {{ zone.name }} | Copy db"
   become: yes
-  template:
+  ansible.builtin.template:
     src: "{{ zone.template }}"
     dest: "{{ coredns_zone_config_dir }}/{{ zone.file }}"
     owner: root
