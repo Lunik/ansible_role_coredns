@@ -84,7 +84,7 @@ This role was created in 2019 by [Lunik (Guillaume MARTINEZ)][author-website].
 [badge-downloads]: https://img.shields.io/ansible/role/d/56142.svg
 [badge-license]: https://img.shields.io/github/license/Lunik/ansible_role_coredns.svg
 [badge-role]: https://img.shields.io/ansible/role/56142.svg
-[link-galaxy]: https://galaxy.ansible.com/geerlingguy/homebrew/
+[link-galaxy]: https://galaxy.ansible.com/lunik/coredns
 [link-license]: https://raw.githubusercontent.com/Lunik/ansible_role_coredns/master/LICENSE
 [coredns]: https://coredns.io
 [coredns-acl-plugin]: https://coredns.io/plugins/acl/
