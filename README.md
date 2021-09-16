@@ -28,7 +28,7 @@ None.
 This section explain how to configure the [CoreDNS acl plugin][coredns-acl-plugin] using the `coredns_acls` variable.
 A CoreDNS `acl` define who can/can't make DNS queries through the CoreDNS instance.
 
-Each `acl` if defined with the following attributes :
+Each `acl` is defined with the following attributes :
 
 | Attribute | Type   | Description |
 |:---------:|:------:|:------------|
@@ -38,7 +38,7 @@ Each `acl` if defined with the following attributes :
 ### Zone
 
 This section explain how to configure zones using the [CoreDNS file plugin][coredns-file-plugin] using the `coredns_zones` variable.
-Each zone if defined with the following attributes :
+Each zone is defined with the following attributes :
 
 | Attribute  | Type   | Description                                      |
 |:----------:|:------:|:-------------------------------------------------|
